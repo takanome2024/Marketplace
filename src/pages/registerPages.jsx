@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
+  const [error, setError] = useState({});
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/independent?status=true")
@@ -28,8 +29,26 @@ export default function RegisterPage() {
   }, []);
 
 
-  async function handleRegister(e) {
-    e.preventDefault();
+async function handleRegister(e) {
+  e.preventDefault();
+  const newErrors = {};
+    if (!email) {
+    newErrors.email = "Email is required!";
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
+    newErrors.email = "Invalid email format!";
+  }
+     if (!password) {
+    newErrors.password = "Password is required!";
+  }
+    if (!confirmPassword) {
+    newErrors.confirmPassword = "Confirm Password is required!";
+  } else if (password !== confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match!";
+  }
+
+    setError(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
     try {
       const userRegistered = await createUserWithEmailAndPassword(
         Auth,
@@ -85,6 +104,7 @@ export default function RegisterPage() {
           />
 
           {/* Email */}
+          {/* Email */}
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-900 capitalize">
               Email <span className="text-error">*</span>
@@ -93,12 +113,30 @@ export default function RegisterPage() {
               id="email"
               type="text"
               name="email"
-              required
-              placeholder="Input email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 border border-gray-300 focus:outline-none"
+              placeholder="Input email"
+              className={`mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 ${error.email ? "border-red-500" : "border-gray-300"
+                } border`}
+              onBlur={() => {
+                if (!email) {
+                  setError((prev) => ({ ...prev, email: "Email is required!" }));
+                } else if (!/\S+@\S+\.\S+/.test(email)) {
+                  setError((prev) => ({ ...prev, email: "Invalid email format!" }));
+                } else {
+                  setError((prev) => {
+                    const { email, ...rest } = prev;
+                    return rest;
+                  });
+                }
+              }}
             />
+
+            {error.email && (
+              <div className="text-red-500 text-sm mt-1">{error.email}</div>
+            )}
           </div>
+
 
           {/* Password */}
           <div className="mb-4 relative">
@@ -114,8 +152,22 @@ export default function RegisterPage() {
               maxLength={99}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Input password"
-              className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 pr-10 text-base text-gray-900 placeholder:text-gray-400 border border-gray-300 focus:outline-none"
+              className={`mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 ${error.password ? "border-red-500" : "border-gray-300"
+                } border`}
+              onBlur={() => {
+                if (!password) {
+                  setError((prev) => ({ ...prev, password: "Password is required!" }));
+                }else {
+                  setError((prev) => {
+                    const { password, ...rest } = prev;
+                    return rest;
+                  });
+                }
+              }}
             />
+            {error.password && (
+              <div className="text-red-500 text-sm mt-1">{error.password}</div>
+            )}
             <button
               type="button"
               onClick={() => setShowPass(!showPass)}
@@ -139,8 +191,22 @@ export default function RegisterPage() {
               maxLength={99}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm password"
-              className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 border border-gray-300 pr-10 focus:outline-none"
+              className={`mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 ${error.confirmPassword ? "border-red-500" : "border-gray-300"
+                } border`}
+              onBlur={() => {
+                if (!confirmPassword) {
+                  setError((prev) => ({ ...prev, confirmPassword: "Confirm Password is required!" }));
+                }else {
+                  setError((prev) => {
+                    const { confirmPassword, ...rest } = prev;
+                    return rest;
+                  });
+                }
+              }}
             />
+            {error.confirmPassword && (
+              <div className="text-red-500 text-sm mt-1">{error.confirmPassword}</div>
+            )}
             <button
               type="button"
               onClick={() => setShowConfirm(!showConfirm)}

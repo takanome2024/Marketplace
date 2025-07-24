@@ -11,7 +11,7 @@ export default function MainLayouts() {
         onAuthStateChanged(Auth, (user) => {
             console.log(user);
             if (!user) {
-                navigate('/auth/login');
+                navigate('/');
             }
         });
     }, []); // untuk protecting route end
