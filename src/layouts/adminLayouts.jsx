@@ -1,36 +1,38 @@
 import { Outlet, useNavigate } from "react-router";
 import Navbar from "../components/navbar"
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Auth } from "../configs/firebase";
 import Loading from "../components/loading";
+import { useLocation } from "react-router";
 
 export default function AdminLayouts() {
     // untuk protecting route start
     const navigate = useNavigate();
-    const [isLoading,setIsLoading]=useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(Auth, (user) => {
-            console.log(user);
-            if (user) {
-                navigate('/');
-            }else{
+            const isAuthPage=location.pathname==="/auth/login" || location.pathname==="/auth/register";
+            // console.log(user);
+            if (user && isAuthPage) {
+                    setIsLoading(false);
+                    navigate("/")
+            } else {
                 setIsLoading(false);
             }
         });
-        return()=>unsubscribe();
-    }, []); // untuk protecting route end
 
+        return () => unsubscribe();
+    }, [location, navigate]); // untuk protecting route end
     return (
         <>
             <Navbar />
             <div>
-                {isLoading?
-                <Loading />:
-                <Outlet />
-                }
+                {isLoading ? <Loading /> : <Outlet />}
             </div>
+
         </>
     )
 }

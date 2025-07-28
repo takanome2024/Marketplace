@@ -23,20 +23,20 @@ export default function Navbar() {
     return () => unlogin();
   }, []);
 
-  
+
   const handleLogout = async () => {
-      Swal.fire({
-    title: 'Confrim',
-    text: 'Are you sure want to Logout?',
-    icon: 'question',
-    confirmButtonText: 'Yes'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      await signOut(Auth);
-      navigate("/");
-    }
-  });
-}
+    Swal.fire({
+      title: 'Confrim',
+      text: 'Are you sure want to Logout?',
+      icon: 'question',
+      confirmButtonText: 'Yes'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await signOut(Auth);
+        navigate("/");
+      }
+    });
+  }
 
   return (
     <>
@@ -47,53 +47,17 @@ export default function Navbar() {
         {/* nav desktop start */}
         <ul className="menus hidden lg:flex">
           <li className="dropdown dropdown-hover">
-            <div
+            <button onClick={() => navigate("/")} className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize">home</button>
+            {/* <div
               tabIndex={0}
               role="button"
               className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize"
             >
-              featured products
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-none"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Item 2</a>
-              </li>
-            </ul>
+              home
+            </div> */}
           </li>
           <li className="dropdown dropdown-hover">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize"
-            >
-              category products
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-none"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Item 2</a>
-              </li>
-            </ul>
-          </li>
-          <li className="dropdown dropdown-hover">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize"
-            >
-              order tutorial
-            </div>
+            <button onClick={() => navigate("/auth/ProductData")} className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize">product list</button>
           </li>
           <li className="dropdown dropdown-hover">
             <div
@@ -121,8 +85,8 @@ export default function Navbar() {
               <button onClick={handleLogout} className="btn  btn-error hidden lg:flex capitalize text-white">logout</button>
             ) : (
               <>
-                <button onClick={()=>navigate("/auth/login")} className="btn   btn-primary btn-soft hidden lg:flex capitalize">login</button>
-                <button onClick={()=>navigate("/auth/register")} className="btn btn-outline btn-primary text-white hidden lg:flex capitalize">signup</button>
+                <button onClick={() => navigate("/auth/login")} className="btn   btn-primary btn-soft hidden lg:flex capitalize">login</button>
+                <button onClick={() => navigate("/auth/register")} className="btn btn-outline btn-primary text-white hidden lg:flex capitalize">signup</button>
               </>
             )
           )}
@@ -143,32 +107,16 @@ export default function Navbar() {
               >
                 <li className="collapse collapse-arrow bg-base-100">
                   <input type="radio" name="my-accordion-2" defaultChecked />
-                  <div className="collapse-title font-semibold capitalize">
-                    featured product
-                  </div>
-                  <div className="collapse-content text-sm">
-                    <ul className="flex flex-col gap-2 list-disc pl-5">
-                      <li>sub item#1</li>
-                      <li>sub item#2</li>
-                    </ul>
-                  </div>
+                  <button onClick={() => navigate("/")} className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize">home</button>
                 </li>
                 <li className="collapse collapse-arrow bg-base-100">
                   <input type="radio" name="my-accordion-2" defaultChecked />
-                  <div className="collapse-title font-semibold capitalize">
-                    category product
-                  </div>
-                  <div className="collapse-content text-sm">
-                    <ul className="flex flex-col gap-2 list-disc pl-5">
-                      <li>sub item#1</li>
-                      <li>sub item#2</li>
-                    </ul>
-                  </div>
+                  <button onClick={() => navigate("/auth/ProductData")} className="btn m-1 bg-transparent text-white border-0 shadow-none capitalize">product list</button>
                 </li>
                 <li className="collapse bg-base-100">
                   <input type="radio" name="my-accordion-2" defaultChecked />
-                  <div className="collapse-title font-semibold capitalize">
-                    order tuorial
+                  <div onClick={() => navigate("/auth/ProductData")} className="collapse-title font-semibold capitalize">
+                    others
                   </div>
                 </li>
                 <li className="collapse bg-base-100">
@@ -183,8 +131,8 @@ export default function Navbar() {
                       <button onClick={handleLogout} className="btn btn-error capitalize w-full text-white">logout</button>
                     ) : (
                       <>
-                        <button onClick={()=>navigate("/auth/login")} className="btn  btn-primary btn-soft">login</button>
-                        <button onClick={()=>navigate("/auth/register")} className="btn btn-outline btn-primary text-primary">signup</button>
+                        <button onClick={() => navigate("/auth/login")} className="btn  btn-primary btn-soft">login</button>
+                        <button onClick={() => navigate("/auth/register")} className="btn btn-outline btn-primary text-primary">signup</button>
                       </>
                     )
                   )}

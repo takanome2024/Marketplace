@@ -1,16 +1,18 @@
 import logo from '../assets/logo.png';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { Auth } from '../configs/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { Auth, googleProvider } from '../configs/firebase';
+import { FcGoogle } from 'react-icons/fc';
+// import { onAuthStateChanged } from 'firebase/auth';
+
 
 export default function LoginPage() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showSuccess, setShowSuccess] = useState(false);
-    const [showFailed, setShowFailed]=useState(false);
+    const [showFailed, setShowFailed] = useState(false);
     // const [isLoggedin, setIsLoggedin] = useState(false);
 
     const handleLogin = async (e) => {
@@ -25,9 +27,29 @@ export default function LoginPage() {
         } catch (error) {
             console.error(error.message)
             setShowFailed(true);
-            setTimeout(()=>{
+            setTimeout(() => {
                 setShowFailed(false);
-            },2000);
+            }, 2000);
+        }
+    }
+
+    async function handleLoginWithGoogle(e) {
+        e.preventDefault();
+        try {
+            const oauthLogin = await signInWithPopup(Auth, googleProvider);
+            const credential = GoogleAuthProvider.credentialFromResult(oauthLogin);
+            const token = credential.accessToken;
+            const user = oauthLogin.user;
+            setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+                navigate("/")
+            }, 2000);
+        } catch (error) {
+            setShowFailed(true);
+            setTimeout(() => {
+                setShowFailed(false);
+            }, 2000);
         }
     }
 
@@ -116,12 +138,20 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <div>
+                        <div className="flex flex-col gap-3">
                             <button type="submit"
                                 className="w-full bg-[#6366F1] text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-600 transition"
                             >
                                 Login
                             </button>
+                            <button
+                                onClick={handleLoginWithGoogle}
+                                className="w-full flex items-center justify-center gap-2 bg-transparent text-[#6366F1] border-[#6366F1] border-1 font-semibold py-2 px-4 rounded-md transition"
+                            >
+                                <FcGoogle />
+                                Login with Google
+                            </button>
+
                         </div>
                     </form>
 

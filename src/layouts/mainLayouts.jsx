@@ -8,13 +8,14 @@ export default function MainLayouts() {
     // untuk protecting route start
     const navigate = useNavigate();
     useEffect(() => {
-        onAuthStateChanged(Auth, (user) => {
-            console.log(user);
-            if (!user) {
+        const unsubscribe = onAuthStateChanged(Auth, (user) => {
+            // console.log(user);
+            if (user) {
                 navigate('/');
             }
         });
-    }, []); // untuk protecting route end
+        return () => unsubscribe();
+    }, [navigate]); // untuk protecting route end
     return (
         <>
             <Navbar />
